@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetCare.Api.Data.Entities;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PetCare.Api.Controllers
 {
@@ -32,7 +30,7 @@ namespace PetCare.Api.Controllers
                 return NotFound();
             }
 
-            var documentType = await _context.DocumentTypes
+            DocumentType documentType = await _context.DocumentTypes
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (documentType == null)
             {
@@ -57,9 +55,27 @@ namespace PetCare.Api.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(documentType);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(documentType);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Ya existe este tipo de documento.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
             }
             return View(documentType);
         }
@@ -72,7 +88,7 @@ namespace PetCare.Api.Controllers
                 return NotFound();
             }
 
-            var documentType = await _context.DocumentTypes.FindAsync(id);
+            DocumentType documentType = await _context.DocumentTypes.FindAsync(id);
             if (documentType == null)
             {
                 return NotFound();
@@ -80,9 +96,7 @@ namespace PetCare.Api.Controllers
             return View(documentType);
         }
 
-        // POST: DocumentTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DocumentType documentType)
@@ -98,19 +112,23 @@ namespace PetCare.Api.Controllers
                 {
                     _context.Update(documentType);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException dbUpdateException)
                 {
-                    if (!DocumentTypeExists(documentType.Id))
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        return NotFound();
+                        ModelState.AddModelError(string.Empty, "Ya existe este tipo de documento.");
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
             }
             return View(documentType);
         }
@@ -123,22 +141,13 @@ namespace PetCare.Api.Controllers
                 return NotFound();
             }
 
-            var documentType = await _context.DocumentTypes
+            DocumentType documentType = await _context.DocumentTypes
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (documentType == null)
             {
                 return NotFound();
             }
 
-            return View(documentType);
-        }
-
-        // POST: DocumentTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var documentType = await _context.DocumentTypes.FindAsync(id);
             _context.DocumentTypes.Remove(documentType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
