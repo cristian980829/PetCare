@@ -85,7 +85,7 @@ namespace PetCare.Api.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description")] DocumentType documentType)
+        public async Task<IActionResult> Edit(int id, DocumentType documentType)
         {
             if (id != documentType.Id)
             {
