@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PetCare.Api.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PetCare.Api.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProceduresController : Controller
     {
         private readonly DataContext _context;

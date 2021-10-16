@@ -3,9 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using PetCare.Api.Data.Entities;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PetCare.Api.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RacesController : Controller
     {
         private readonly DataContext _context;

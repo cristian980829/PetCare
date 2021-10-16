@@ -4,9 +4,12 @@ using PetCare.Api.Data.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PetCare.Api.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DocumentTypesController : Controller
     {
         private readonly DataContext _context;

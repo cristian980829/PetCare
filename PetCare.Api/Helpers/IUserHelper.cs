@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PetCare.Api.Data.Entities;
 using System.Threading.Tasks;
+using PetCare.Api.Models;
 
 namespace PetCare.Api.Helpers
 {
@@ -15,5 +16,9 @@ namespace PetCare.Api.Helpers
         Task AddUserToRoleAsync(User user, string roleName);
 
         Task<bool> IsUserInRoleAsync(User user, string roleName);
+
+        Task<SignInResult> LoginAsync(LoginViewModel model);
+
+        Task LogoutAsync();
     }
 }
