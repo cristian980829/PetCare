@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31605.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCare.Api", "PetCare.Api\PetCare.Api.csproj", "{B4643BF5-1D5C-408B-9285-7018BB922D61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetCare.Api", "PetCare.Api\PetCare.Api.csproj", "{B4643BF5-1D5C-408B-9285-7018BB922D61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetCare.Common", "PetCare.Common\PetCare.Common.csproj", "{E2656D48-DEB8-4B6D-9241-0DC42E4B623B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B4643BF5-1D5C-408B-9285-7018BB922D61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4643BF5-1D5C-408B-9285-7018BB922D61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4643BF5-1D5C-408B-9285-7018BB922D61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2656D48-DEB8-4B6D-9241-0DC42E4B623B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2656D48-DEB8-4B6D-9241-0DC42E4B623B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2656D48-DEB8-4B6D-9241-0DC42E4B623B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2656D48-DEB8-4B6D-9241-0DC42E4B623B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
