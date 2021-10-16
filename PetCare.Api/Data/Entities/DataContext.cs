@@ -9,6 +9,14 @@ namespace PetCare.Api.Data.Entities
         {
         }
 
+        public DbSet<Detail> Details { get; set; }
+
+        public DbSet<ClinicalHistory> ClinicalHistories { get; set; }
+
+        public DbSet<Pet> Pets { get; set; }
+
+        public DbSet<PetPhoto> PetPhotos { get; set; }
+
         public DbSet<DocumentType> DocumentTypes { get; set; }
 
         public DbSet<Race> Races { get; set; }
@@ -20,6 +28,9 @@ namespace PetCare.Api.Data.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Pet>().HasIndex(x => x.Id).IsUnique();
+
             modelBuilder.Entity<Race>().HasIndex(x => x.Description).IsUnique();
             modelBuilder.Entity<PetType>().HasIndex(x => x.Description).IsUnique();
             modelBuilder.Entity<DocumentType>().HasIndex(x => x.Description).IsUnique();

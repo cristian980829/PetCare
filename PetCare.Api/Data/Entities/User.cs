@@ -2,6 +2,7 @@
 using PetCare.Common.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace PetCare.Api.Data.Entities
 {
@@ -44,6 +45,8 @@ namespace PetCare.Api.Data.Entities
 
         [Display(Name = "Usuario")]
         public string FullName => $"{FirstName} {LastName}";
+
+        public ICollection<Pet> Pets { get; set; }
     }
 
 }
