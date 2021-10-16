@@ -1,15 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PetCare.Api.Data;
 using PetCare.Api.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PetCare.Api
 {
@@ -30,6 +26,8 @@ namespace PetCare.Api
             {
                 x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddTransient<SeedDb>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
