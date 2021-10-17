@@ -39,9 +39,10 @@ namespace PetCare.Api.Data.Entities
         [Display(Name = "# Fotos")]
         public int PetPhotosCount => PetPhotos == null ? 0 : PetPhotos.Count;
 
+        //TODO: Fix the correct path
         [Display(Name = "Foto")]
         public string ImageFullPath => PetPhotos == null || PetPhotos.Count == 0
-            ? $"https://localhost:44345/images/noimage.png"
+            ? $"https://localhost:44334/images/noimage.png"
             : PetPhotos.FirstOrDefault().ImageFullPath;
 
         public ICollection<ClinicalHistory> ClincalHistories { get; set; }
