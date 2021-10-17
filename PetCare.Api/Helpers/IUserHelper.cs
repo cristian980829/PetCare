@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PetCare.Api.Data.Entities;
-using System.Threading.Tasks;
 using PetCare.Api.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace PetCare.Api.Helpers
 {
@@ -9,7 +10,13 @@ namespace PetCare.Api.Helpers
     {
         Task<User> GetUserAsync(string email);
 
+        Task<User> GetUserAsync(Guid id);
+
         Task<IdentityResult> AddUserAsync(User user, string password);
+
+        Task<IdentityResult> UpdateUserAsync(User user);
+
+        Task<IdentityResult> DeleteUserAsync(User user);
 
         Task CheckRoleAsync(string roleName);
 

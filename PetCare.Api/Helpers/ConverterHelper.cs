@@ -45,6 +45,7 @@ namespace PetCare.Api.Helpers
                 Email = user.Email,
                 FirstName = user.FirstName,
                 Id = user.Id,
+                ImageId = user.ImageId,
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
                 UserType = user.UserType,

@@ -54,5 +54,10 @@ namespace PetCare.Api.Models
         public int DocumentTypeId { get; set; }
 
         public IEnumerable<SelectListItem> DocumentTypes { get; set; }
+
+        [Display(Name = "Foto")]
+        public string ImageFullPath => ImageId == Guid.Empty
+            ? $"https://localhost:44334/images/noimage.png"
+            : $"https://petcarecamilocristian.blob.core.windows.net/users/{ImageId}";
     }
 }
