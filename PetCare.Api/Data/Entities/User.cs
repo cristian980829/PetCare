@@ -47,6 +47,9 @@ namespace PetCare.Api.Data.Entities
         public string FullName => $"{FirstName} {LastName}";
 
         public ICollection<Pet> Pets { get; set; }
+
+        [Display(Name = "# Mascotas")]
+        public int PetsCount => Pets == null ? 0 : Pets.Count;
     }
 
 }
