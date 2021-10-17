@@ -5,7 +5,7 @@ namespace PetCare.Api.Helpers
 {
     public interface ICombosHelper
     {
-        IEnumerable<SelectListItem> GetCombosDocumentTypes();
+        IEnumerable<SelectListItem> GetComboDocumentTypes();
 
         IEnumerable<SelectListItem> GetComboProcedures();
 

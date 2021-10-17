@@ -13,10 +13,9 @@ namespace PetCare.Api.Data.Entities
         [Display(Name = "Foto")]
         public Guid ImageId { get; set; }
 
-        //TODO: Fix the correct path
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == Guid.Empty
             ? $"https://localhost:44345/images/noimage.png"
-            : $"https://vehicleszuluprep.blob.core.windows.net/vehicles/{ImageId}";
+            : $"https://petcarecamilocristian.blob.core.windows.net/pets/{ImageId}";
     }
 }
