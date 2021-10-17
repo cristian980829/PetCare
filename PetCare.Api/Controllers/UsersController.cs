@@ -123,8 +123,35 @@ namespace PetCare.Api.Controllers
                 return NotFound();
             }
 
+            await _blobHelper.DeleteBlobAsync(user.ImageId, "users");
             await _userHelper.DeleteUserAsync(user);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            User user = await _context.Users
+                .Include(x => x.DocumentType)
+                .Include(x => x.Pets)
+                .ThenInclude(x => x.Race)
+                .Include(x => x.Pets)
+                .ThenInclude(x => x.PetType)
+                .Include(x => x.Pets)
+                .ThenInclude(x => x.PetPhotos)
+                .Include(x => x.Pets)
+                //.ThenInclude(x => x.Histories)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
     }
 }
