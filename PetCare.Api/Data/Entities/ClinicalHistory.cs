@@ -34,7 +34,7 @@ namespace PetCare.Api.Data.Entities
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal TotalProcedure => Details == null ? 0 : Details.Sum(x => x.ProcedurePrice);
 
-        [Display(Name = "Total Repuestos")]
+        [Display(Name = "Total Medicina")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal TotalMedicine => Details == null ? 0 : Details.Sum(x => x.MedicinePrice);
 

@@ -50,9 +50,9 @@ namespace PetCare.Api.Data.Entities
             ? $"https://localhost:44334/images/noimage.png"
             : PetPhotos.FirstOrDefault().ImageFullPath;
 
-        public ICollection<ClinicalHistory> ClincalHistories { get; set; }
+        public ICollection<ClinicalHistory> ClinicalHistories { get; set; }
 
         [Display(Name = "# Historias")]
-        public int ClincalHistoriesHistoriesCount => ClincalHistories == null ? 0 : ClincalHistories.Count;
+        public int ClinicalHistoriesCount => ClinicalHistories == null ? 0 : ClinicalHistories.Count;
     }
 }

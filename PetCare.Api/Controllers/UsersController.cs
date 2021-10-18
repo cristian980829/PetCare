@@ -145,7 +145,7 @@ namespace PetCare.Api.Controllers
                 .Include(x => x.Pets)
                 .ThenInclude(x => x.PetPhotos)
                 .Include(x => x.Pets)
-                .ThenInclude(x => x.ClincalHistories)
+                .ThenInclude(x => x.ClinicalHistories)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (user == null)
             {
@@ -310,7 +310,7 @@ namespace PetCare.Api.Controllers
             Pet pet = await _context.Pets
                 .Include(x => x.User)
                 .Include(x => x.PetPhotos)
-                .Include(x => x.ClincalHistories)
+                .Include(x => x.ClinicalHistories)
                 .ThenInclude(x => x.Details)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (pet == null)
@@ -396,8 +396,92 @@ namespace PetCare.Api.Controllers
             }
 
             return View(model);
-
         }
+
+        public async Task<IActionResult> DetailsPet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Pet pet = await _context.Pets
+                .Include(x => x.User)
+                .Include(x => x.PetType)
+                .Include(x => x.Race)
+                .Include(x => x.PetPhotos)
+                .Include(x => x.ClinicalHistories)
+                .ThenInclude(x => x.Details)
+                .ThenInclude(x => x.Procedure)
+                .Include(x => x.ClinicalHistories)
+                .ThenInclude(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            return View(pet);
+        }
+
+        public async Task<IActionResult> AddClinicalHistory(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Pet pet = await _context.Pets.FindAsync(id);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            ClinicalHistoryViewModel model = new ClinicalHistoryViewModel
+            {
+                PetId = pet.Id
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddClinicalHistory(ClinicalHistoryViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Pet pet = await _context.Pets
+                    .Include(x => x.ClinicalHistories)
+                    .FirstOrDefaultAsync(x => x.Id == model.PetId);
+                if (pet == null)
+                {
+                    return NotFound();
+                }
+
+                User user = await _userHelper.GetUserAsync(User.Identity.Name);
+                ClinicalHistory clinicalHistory = new ClinicalHistory
+                {
+                    Date = DateTime.UtcNow,
+                    Remarks = model.Remarks,
+                    User = user
+                };
+
+                if (pet.ClinicalHistories == null)
+                {
+                    pet.ClinicalHistories = new List<ClinicalHistory>();
+                }
+
+                pet.ClinicalHistories.Add(clinicalHistory);
+                _context.Pets.Update(pet);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(DetailsPet), new { id = pet.Id });
+            }
+
+            return View(model);
+        }
+
+
 
     }
 }
