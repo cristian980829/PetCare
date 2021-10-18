@@ -16,6 +16,33 @@ namespace PetCare.Api.Helpers
             _combosHelper = combosHelper;
         }
 
+        public async Task<Detail> ToDetailAsync(DetailViewModel model, bool isNew)
+        {
+            return new Detail
+            {
+                Id = isNew ? 0 : model.Id,
+                ClinicalHistory = await _context.ClinicalHistories.FindAsync(model.ClinicalHistoryId),
+                ProcedurePrice = model.ProcedurePrice,
+                Procedure = await _context.Procedures.FindAsync(model.ProcedureId),
+                Remarks = model.Remarks,
+                MedicinePrice = model.MedicinePrice
+            };
+        }
+
+        public DetailViewModel ToDetailViewModel(Detail detail)
+        {
+            return new DetailViewModel
+            {
+                ClinicalHistoryId = detail.ClinicalHistory.Id,
+                Id = detail.Id,
+                ProcedurePrice = detail.ProcedurePrice,
+                ProcedureId = detail.Procedure.Id,
+                Procedures = _combosHelper.GetComboProcedures(),
+                Remarks = detail.Remarks,
+                MedicinePrice = detail.MedicinePrice
+            };
+        }
+
         public async Task<User> ToUserAsync(UserViewModel model, Guid imageId, bool isNew)
         {
             return new User

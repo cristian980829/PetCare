@@ -8,7 +8,7 @@ namespace PetCare.Api.Data.Entities
 
         [Display(Name = "Historia Clínica")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public ClinicalHistory History { get; set; }
+        public ClinicalHistory ClinicalHistory { get; set; }
 
         [Display(Name = "Procedimiento")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]

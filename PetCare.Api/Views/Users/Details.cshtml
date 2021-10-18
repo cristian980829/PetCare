@@ -130,9 +130,6 @@
                                 @Html.DisplayFor(modelItem => item.PetPhotosCount)
                             </td>
                             <td>
-                                <img src="@item.ImageFullPath" style="width:100px;height:100px;max-width: 100%; height: auto;" />
-                            </td>
-                            <td>
                                 <a asp-action="EditPet" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
                                 <a asp-action="DetailsPet" asp-route-id="@item.Id" class="btn btn-info">Historias<i class="glyphicon glyphicon-align-justify"></i></a>
                                 <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog">Borrar</button>

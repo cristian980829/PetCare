@@ -14,5 +14,9 @@ namespace PetCare.Api.Helpers
         Task<Pet> ToPetAsync(PetViewModel model, bool isNew);
 
         PetViewModel ToPetViewModel(Pet pet);
+
+        Task<Detail> ToDetailAsync(DetailViewModel model, bool isNew);
+
+        DetailViewModel ToDetailViewModel(Detail detail);
     }
 }

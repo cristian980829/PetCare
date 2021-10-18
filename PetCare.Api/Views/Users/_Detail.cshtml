@@ -1,0 +1,25 @@
+﻿@model PetCare.Api.Models.DetailViewModel
+
+<div class="form-group">
+    <label asp-for="ProcedureId" class="control-label"></label>
+    <select asp-for="ProcedureId" asp-items="Model.Procedures" class="form-control"></select>
+    <span asp-validation-for="ProcedureId" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Remarks" class="control-label"></label>
+    <textarea asp-for="Remarks" class="form-control"></textarea>
+    <span asp-validation-for="Remarks" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="ProcedurePrice" class="control-label"></label>
+    <input asp-for="ProcedurePrice" class="form-control" />
+    <span asp-validation-for="ProcedurePrice" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="MedicinePrice" class="control-label"></label>
+    <input asp-for="MedicinePrice" class="form-control" />
+    <span asp-validation-for="MedicinePrice" class="text-danger"></span>
+</div>
