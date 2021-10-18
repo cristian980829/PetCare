@@ -155,7 +155,6 @@ namespace PetCare.Api.Controllers
             return View(user);
         }
 
-        //---------------------------------------
 
         public async Task<IActionResult> AddPet(string id)
         {
@@ -339,10 +338,65 @@ namespace PetCare.Api.Controllers
                 return NotFound();
             }
 
-            await _blobHelper.DeleteBlobAsync(petPhoto.ImageId, "petphotos");
+            try
+            {
+                await _blobHelper.DeleteBlobAsync(petPhoto.ImageId, "petphotos");
+            }
+            catch { }
             _context.PetPhotos.Remove(petPhoto);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(EditPet), new { id = petPhoto.Id });
+            return RedirectToAction(nameof(EditPet), new { id = petPhoto.Pet.Id });
+        }
+
+        public async Task<IActionResult> AddPetImage(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Pet pet = await _context.Pets
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            PetPhotoViewModel model = new()
+            {
+                PetId = pet.Id
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPetImage(PetPhotoViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Guid imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "petphotos");
+                Pet pet = await _context.Pets
+                    .Include(x => x.PetPhotos)
+                    .FirstOrDefaultAsync(x => x.Id == model.PetId);
+                if (pet.PetPhotos == null)
+                {
+                    pet.PetPhotos = new List<PetPhoto>();
+                }
+
+                pet.PetPhotos.Add(new PetPhoto
+                {
+                    ImageId = imageId
+                });
+
+                _context.Pets.Update(pet);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(EditPet), new { id = pet.Id });
+            }
+
+            return View(model);
+
         }
 
     }
