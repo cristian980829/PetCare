@@ -13,13 +13,17 @@ namespace PetCare.Api.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public Pet pet { get; set; }
 
-        [Display(Name = "Fecha")]
+        [Display(Name = "Fecha de nacimiento")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         public DateTime Date { get; set; }
 
         [Display(Name = "Observación")]
         [DataType(DataType.MultilineText)]
         public string Remarks { get; set; }
+
+        [Display(Name = "Veterinario")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public User User { get; set; }
 
         public ICollection<Detail> Details { get; set; }
 

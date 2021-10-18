@@ -13,6 +13,11 @@ namespace PetCare.Api.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public PetType PetType { get; set; }
 
+        [Display(Name = "Nombre")]
+        [MaxLength(50, ErrorMessage = "El campo {0} no puede tener más de {1} carácteres.")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string Name { get; set; }
+
         [Display(Name = "Raza")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public Race Race { get; set; }

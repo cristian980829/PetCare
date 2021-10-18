@@ -53,8 +53,8 @@ namespace PetCare.Api.Helpers
                 .Include(x => x.Pets)
                 .ThenInclude(x => x.PetPhotos)
                 .Include(x => x.Pets)
-                //.ThenInclude(x => x.Histories)
-                //.ThenInclude(x => x.Details)
+                .ThenInclude(x => x.ClincalHistories)
+                .ThenInclude(x => x.Details)
                 .FirstOrDefaultAsync(x => x.Email == email);
         }
 
@@ -65,8 +65,8 @@ namespace PetCare.Api.Helpers
                 .Include(x => x.Pets)
                 .ThenInclude(x => x.PetPhotos)
                 .Include(x => x.Pets)
-                //.ThenInclude(x => x.Histories)
-                //.ThenInclude(x => x.Details)
+                .ThenInclude(x => x.ClincalHistories)
+                .ThenInclude(x => x.Details)
                 .FirstOrDefaultAsync(x => x.Id == id.ToString());
         }
 

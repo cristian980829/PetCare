@@ -51,5 +51,38 @@ namespace PetCare.Api.Helpers
                 UserType = user.UserType,
             };
         }
+
+        public async Task<Pet> ToPetAsync(PetViewModel model, bool isNew)
+        {
+            return new Pet
+            {
+                Race = await _context.Races.FindAsync(model.RaceId),
+                DateOfBirth = model.DateOfBirth,
+                Id = isNew ? 0 : model.Id,
+                Weight = model.Weight,
+                Name = model.Name,
+                Remarks = model.Remarks,
+                PetType = await _context.PetTypes.FindAsync(model.PetTypeId)
+            };
+        }
+
+        public PetViewModel ToPetViewModel(Pet pet)
+        {
+            return new PetViewModel
+            {
+                RaceId = pet.Race.Id,
+                Races = _combosHelper.GetComboRaces(),
+                Id = pet.Id,
+                Weight = pet.Weight,
+                Name = pet.Name,
+                DateOfBirth = pet.DateOfBirth,
+                Remarks = pet.Remarks,
+                UserId = pet.User.Id,
+                PetPhotos = pet.PetPhotos,
+                PetTypeId = pet.PetType.Id,
+                PetTypes = _combosHelper.GetComboPetTypes()
+            };
+        }
+
     }
 }
