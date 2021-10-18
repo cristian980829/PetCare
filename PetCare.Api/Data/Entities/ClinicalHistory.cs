@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace PetCare.Api.Data.Entities
 {
@@ -25,6 +26,7 @@ namespace PetCare.Api.Data.Entities
         [DataType(DataType.MultilineText)]
         public string Remarks { get; set; }
 
+        [JsonIgnore]
         [Display(Name = "Veterinario")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public User User { get; set; }

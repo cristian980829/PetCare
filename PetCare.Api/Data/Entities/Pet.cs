@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace PetCare.Api.Data.Entities
 {
@@ -32,6 +33,7 @@ namespace PetCare.Api.Data.Entities
         public decimal Weight { get; set; }
 
         [Display(Name = "Propietario")]
+        [JsonIgnore]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public User User { get; set; }
 

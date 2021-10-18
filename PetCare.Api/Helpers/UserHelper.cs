@@ -28,6 +28,8 @@ namespace PetCare.Api.Helpers
             return await _userManager.CreateAsync(user, password);
         }
 
+
+
         public async Task<User> AddUserAsync(AddUserViewModel model, Guid imageId, UserType userType)
         {
             User user = new User
@@ -149,6 +151,11 @@ namespace PetCare.Api.Helpers
         public async Task<IdentityResult> ResetPasswordAsync(User user, string token, string password)
         {
             return await _userManager.ResetPasswordAsync(user, token, password);
+        }
+
+        public async Task<SignInResult> ValidatePasswordAsync(User user, string password)
+        {
+            return await _signInManager.CheckPasswordSignInAsync(user, password, false);
         }
     }
 }

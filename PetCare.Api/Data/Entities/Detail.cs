@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PetCare.Api.Data.Entities
 {
@@ -6,6 +7,7 @@ namespace PetCare.Api.Data.Entities
     {
         public int Id { get; set; }
 
+        [JsonIgnore]
         [Display(Name = "Historia Clínica")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public ClinicalHistory ClinicalHistory { get; set; }
