@@ -11,11 +11,15 @@ namespace PetCare.Api.Data.Entities
 
         [Display(Name = "Mascota")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public Pet pet { get; set; }
+        public Pet Pet { get; set; }
 
         [Display(Name = "Fecha de nacimiento")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}")]
         public DateTime Date { get; set; }
+
+        [Display(Name = "Fecha")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}")]
+        public DateTime DateLocal => Date.ToLocalTime();
 
         [Display(Name = "Observación")]
         [DataType(DataType.MultilineText)]

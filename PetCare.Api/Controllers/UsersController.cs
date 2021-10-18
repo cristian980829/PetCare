@@ -481,7 +481,89 @@ namespace PetCare.Api.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> EditClinicalHistory(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            ClinicalHistory clinicalHistory = await _context.ClinicalHistories
+                .Include(x => x.Pet)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (clinicalHistory == null)
+            {
+                return NotFound();
+            }
+
+            ClinicalHistoryViewModel model = new ClinicalHistoryViewModel
+            {
+                Date = clinicalHistory.Date,
+                Remarks = clinicalHistory.Remarks,
+                PetId = clinicalHistory.Pet.Id
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditClinicalHistory(int id, ClinicalHistoryViewModel historyViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                ClinicalHistory history = await _context.ClinicalHistories.FindAsync(id);
+                history.Date = historyViewModel.Date;
+                history.Remarks = historyViewModel.Remarks;
+                _context.ClinicalHistories.Update(history);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(DetailsPet), new { id = historyViewModel.PetId });
+            }
+
+            return View(historyViewModel);
+        }
+
+        public async Task<IActionResult> DeleteClinicalHistory(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ClinicalHistory history = await _context.ClinicalHistories
+                .Include(x => x.Details)
+                .Include(x => x.Pet)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (history == null)
+            {
+                return NotFound();
+            }
+
+            _context.ClinicalHistories.Remove(history);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(DetailsPet), new { id = history.Pet.Id });
+        }
+
+        public async Task<IActionResult> DetailsClinicalHistory(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ClinicalHistory history = await _context.ClinicalHistories
+                .Include(x => x.Details)
+                .ThenInclude(x => x.Procedure)
+                .Include(x => x.Pet)
+                .ThenInclude(x => x.PetPhotos)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (history == null)
+            {
+                return NotFound();
+            }
+
+            return View(history);
+        }
 
     }
 }

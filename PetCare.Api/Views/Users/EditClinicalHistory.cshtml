@@ -1,0 +1,29 @@
+﻿@model PetCare.Api.Models.ClinicalHistoryViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar</h1>
+
+<h4>Historia Clínica</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditClinicalHistory">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PetId" />
+
+            <partial name="_ClinicalHistory" />
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
