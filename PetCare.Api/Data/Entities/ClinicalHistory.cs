@@ -14,7 +14,7 @@ namespace PetCare.Api.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public Pet Pet { get; set; }
 
-        [Display(Name = "Fecha de nacimiento")]
+        [Display(Name = "Fecha")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}")]
         public DateTime Date { get; set; }
 

@@ -7,7 +7,7 @@ namespace PetCare.Api.Models
     {
         public int PetId { get; set; }
 
-        [Display(Name = "Fecha de nacimiento")]
+        [Display(Name = "Fecha")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public DateTime Date { get; set; }
