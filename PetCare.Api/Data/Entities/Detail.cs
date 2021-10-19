@@ -7,8 +7,8 @@ namespace PetCare.Api.Data.Entities
     {
         public int Id { get; set; }
 
-        [JsonIgnore]
         [Display(Name = "Historia Clínica")]
+        [JsonIgnore]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public ClinicalHistory ClinicalHistory { get; set; }
 

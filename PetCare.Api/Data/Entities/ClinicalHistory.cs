@@ -11,6 +11,7 @@ namespace PetCare.Api.Data.Entities
         public int Id { get; set; }
 
         [Display(Name = "Mascota")]
+        [JsonIgnore]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public Pet Pet { get; set; }
 
