@@ -85,7 +85,7 @@ namespace PetCare.Api.Controllers.API
             User user = await _userHelper.GetUserAsync(request.Email);
             if (user != null)
             {
-                return BadRequest("Ya existe un usuario rtegistrado con ese email.");
+                return BadRequest("Ya existe un usuario registrado con ese email.");
             }
 
             Guid imageId = Guid.Empty;
@@ -118,7 +118,7 @@ namespace PetCare.Api.Controllers.API
                 token = myToken
             }, protocol: HttpContext.Request.Scheme);
 
-            _mailHelper.SendMail(request.Email, "Vehicles - Confirmación de cuenta", $"<h1>Vehicles - Confirmación de cuenta</h1>" +
+            _mailHelper.SendMail(request.Email, "Pets - Confirmación de cuenta", $"<h1>Pets - Confirmación de cuenta</h1>" +
                 $"Para habilitar el usuario, " +
                 $"por favor hacer clic en el siguiente enlace: </br></br><a href = \"{tokenLink}\">Confirmar Email</a>");
 
