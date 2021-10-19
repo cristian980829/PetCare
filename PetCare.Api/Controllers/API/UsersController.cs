@@ -7,6 +7,10 @@ using PetCare.Common.Enums;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure;
+using PetCare.Api.Models.Request;
+using System;
+using PetCare.Api.Helpers;
 
 namespace PetCare.Api.Controllers.API
 {
@@ -16,10 +20,16 @@ namespace PetCare.Api.Controllers.API
     public class UsersController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
+        private readonly IBlobHelper _blobHelper;
 
-        public UsersController(DataContext context)
+        public UsersController(DataContext context, IUserHelper userHelper, IMailHelper mailHelper, IBlobHelper blobHelper)
         {
             _context = context;
+            _userHelper = userHelper;
+            _mailHelper = mailHelper;
+            _blobHelper = blobHelper;
         }
 
         [HttpGet]
@@ -56,6 +66,63 @@ namespace PetCare.Api.Controllers.API
             }
 
             return user;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<User>> PostUser(UserRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            DocumentType documentType = await _context.DocumentTypes.FindAsync(request.DocumentTypeId);
+            if (documentType == null)
+            {
+                return BadRequest("El tipo de documento no existe.");
+            }
+
+            User user = await _userHelper.GetUserAsync(request.Email);
+            if (user != null)
+            {
+                return BadRequest("Ya existe un usuario rtegistrado con ese email.");
+            }
+
+            Guid imageId = Guid.Empty;
+            if (request.Image != null && request.Image.Length > 0)
+            {
+                imageId = await _blobHelper.UploadBlobAsync(request.Image, "users");
+            }
+
+            user = new User
+            {
+                Address = request.Address,
+                Document = request.Document,
+                DocumentType = documentType,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                ImageId = imageId,
+                LastName = request.LastName,
+                PhoneNumber = request.PhoneNumber,
+                UserName = request.Email,
+                UserType = UserType.User,
+            };
+
+            await _userHelper.AddUserAsync(user, "123456");
+            await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
+
+            string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+            string tokenLink = Url.Action("ConfirmEmail", "Account", new
+            {
+                userid = user.Id,
+                token = myToken
+            }, protocol: HttpContext.Request.Scheme);
+
+            _mailHelper.SendMail(request.Email, "Vehicles - Confirmación de cuenta", $"<h1>Vehicles - Confirmación de cuenta</h1>" +
+                $"Para habilitar el usuario, " +
+                $"por favor hacer clic en el siguiente enlace: </br></br><a href = \"{tokenLink}\">Confirmar Email</a>");
+
+            return Ok(user);
         }
     }
 }
