@@ -17,6 +17,10 @@ namespace PetCare.Api.Helpers
 
         Task<Detail> ToDetailAsync(DetailViewModel model, bool isNew);
 
+        Task<MedicalFormula> ToFormulaAsync(MedicalFormulaViewModel model, bool isNew);
+
         DetailViewModel ToDetailViewModel(Detail detail);
+
+        MedicalFormulaViewModel ToFormulaViewModel(MedicalFormula formula);
     }
 }

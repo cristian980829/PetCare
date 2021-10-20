@@ -16,6 +16,31 @@ namespace PetCare.Api.Helpers
             _combosHelper = combosHelper;
         }
 
+        public async Task<MedicalFormula> ToFormulaAsync(MedicalFormulaViewModel model, bool isNew)
+        {
+            return new MedicalFormula
+            {
+                Id = isNew ? 0 : model.Id,
+                ClinicalHistory = await _context.ClinicalHistories.FindAsync(model.ClinicalHistoryId),
+                MedicinePrice = model.MedicinePrice,
+                Medicine = await _context.Medicines.FindAsync(model.MedicineId),
+                Remarks = model.Remarks,
+            };
+        }
+
+        public MedicalFormulaViewModel ToFormulaViewModel(MedicalFormula formula)
+        {
+            return new MedicalFormulaViewModel
+            {
+                ClinicalHistoryId = formula.ClinicalHistory.Id,
+                Id = formula.Id,
+                MedicineId = formula.Medicine.Id,
+                Medicines = _combosHelper.GetComboMedicines(),
+                Remarks = formula.Remarks,
+                MedicinePrice = formula.MedicinePrice
+            };
+        }
+
         public async Task<Detail> ToDetailAsync(DetailViewModel model, bool isNew)
         {
             return new Detail
@@ -24,6 +49,7 @@ namespace PetCare.Api.Helpers
                 ClinicalHistory = await _context.ClinicalHistories.FindAsync(model.ClinicalHistoryId),
                 ProcedurePrice = model.ProcedurePrice,
                 Procedure = await _context.Procedures.FindAsync(model.ProcedureId),
+                Medicine = await _context.Medicines.FindAsync(model.MedicineId),
                 Remarks = model.Remarks,
                 MedicinePrice = model.MedicinePrice
             };
@@ -36,10 +62,12 @@ namespace PetCare.Api.Helpers
                 ClinicalHistoryId = detail.ClinicalHistory.Id,
                 Id = detail.Id,
                 ProcedurePrice = detail.ProcedurePrice,
+                MedicinePrice = detail.MedicinePrice,
                 ProcedureId = detail.Procedure.Id,
+                MedicineId = detail.Medicine.Id,
                 Procedures = _combosHelper.GetComboProcedures(),
-                Remarks = detail.Remarks,
-                MedicinePrice = detail.MedicinePrice
+                Medicines = _combosHelper.GetComboMedicines(),
+                Remarks = detail.Remarks
             };
         }
 

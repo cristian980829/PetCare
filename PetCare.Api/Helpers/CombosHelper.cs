@@ -52,6 +52,25 @@ namespace PetCare.Api.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboMedicines()
+        {
+            List<SelectListItem> list = _context.Medicines.Select(x => new SelectListItem
+            {
+                Text = x.Description,
+                Value = $"{x.Id}"
+            })
+                .OrderBy(x => x.Text)
+                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Seleccione un Medicamento...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
         public IEnumerable<SelectListItem> GetComboDocumentTypes()
         {
             List<SelectListItem> list = _context.DocumentTypes.Select(x => new SelectListItem

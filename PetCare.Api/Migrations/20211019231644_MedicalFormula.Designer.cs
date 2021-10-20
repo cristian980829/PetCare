@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetCare.Api.Data.Entities;
 
 namespace PetCare.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211019231644_MedicalFormula")]
+    partial class MedicalFormula
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,9 +190,6 @@ namespace PetCare.Api.Migrations
                     b.Property<int>("ClinicalHistoryId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MedicineId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("MedicinePrice")
                         .HasColumnType("decimal(18,2)");
 
@@ -206,8 +205,6 @@ namespace PetCare.Api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClinicalHistoryId");
-
-                    b.HasIndex("MedicineId");
 
                     b.HasIndex("ProcedureId");
 
@@ -584,10 +581,6 @@ namespace PetCare.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PetCare.Api.Data.Entities.Medicine", "Medicine")
-                        .WithMany()
-                        .HasForeignKey("MedicineId");
-
                     b.HasOne("PetCare.Api.Data.Entities.Procedure", "Procedure")
                         .WithMany("Details")
                         .HasForeignKey("ProcedureId")
@@ -595,8 +588,6 @@ namespace PetCare.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("ClinicalHistory");
-
-                    b.Navigation("Medicine");
 
                     b.Navigation("Procedure");
                 });

@@ -34,6 +34,8 @@ namespace PetCare.Api.Data.Entities
 
         public ICollection<Detail> Details { get; set; }
 
+        public ICollection<MedicalFormula> MedicalFormulas { get; set; }
+
         [Display(Name = "# Detalles")]
         public int DetailsCount => Details == null ? 0 : Details.Count;
 
@@ -41,12 +43,24 @@ namespace PetCare.Api.Data.Entities
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal TotalProcedure => Details == null ? 0 : Details.Sum(x => x.ProcedurePrice);
 
-        [Display(Name = "Total Medicina")]
+        [Display(Name = "Total Medicamentos Detalle")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
-        public decimal TotalMedicine => Details == null ? 0 : Details.Sum(x => x.MedicinePrice);
+        public decimal TotalMedicineDetail => Details == null ? 0 : Details.Sum(x => x.MedicinePrice);
+
+        [Display(Name = "Total Medicamentos Formula")]
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal TotalMedicineFormula => MedicalFormulas == null ? 0 : MedicalFormulas.Sum(x => x.MedicinePrice);
+
+        [Display(Name = "Total Medicamentos")]
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal TotalMedicine => TotalMedicineDetail + TotalMedicineFormula;
+
+        [Display(Name = "Total Detalles")]
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal TotalDetalles => Details == null ? 0 : Details.Sum(x => x.TotalPrice);
 
         [Display(Name = "Total")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
-        public decimal Total => Details == null ? 0 : Details.Sum(x => x.TotalPrice);
+        public decimal Total => TotalDetalles + TotalMedicineFormula;
     }
 }

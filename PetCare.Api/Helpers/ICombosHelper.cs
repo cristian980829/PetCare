@@ -9,6 +9,8 @@ namespace PetCare.Api.Helpers
 
         IEnumerable<SelectListItem> GetComboProcedures();
 
+        IEnumerable<SelectListItem> GetComboMedicines();
+
         IEnumerable<SelectListItem> GetComboPetTypes();
 
         IEnumerable<SelectListItem> GetComboRaces();

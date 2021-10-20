@@ -429,6 +429,9 @@ namespace PetCare.Api.Controllers
                 .ThenInclude(x => x.Details)
                 .ThenInclude(x => x.Procedure)
                 .Include(x => x.ClinicalHistories)
+                .ThenInclude(x => x.MedicalFormulas)
+                .ThenInclude(x => x.Medicine)
+                .Include(x => x.ClinicalHistories)
                 .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (pet == null)
@@ -569,6 +572,8 @@ namespace PetCare.Api.Controllers
             ClinicalHistory history = await _context.ClinicalHistories
                 .Include(x => x.Details)
                 .ThenInclude(x => x.Procedure)
+                .Include(x => x.Details)
+                .ThenInclude(x => x.Medicine)
                 .Include(x => x.Pet)
                 .ThenInclude(x => x.PetPhotos)
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -596,7 +601,8 @@ namespace PetCare.Api.Controllers
             DetailViewModel model = new DetailViewModel
             {
                 ClinicalHistoryId = history.Id,
-                Procedures = _combosHelper.GetComboProcedures()
+                Procedures = _combosHelper.GetComboProcedures(),
+                Medicines = _combosHelper.GetComboMedicines()
             };
 
             return View(model);
@@ -630,6 +636,7 @@ namespace PetCare.Api.Controllers
             }
 
             detailViewModel.Procedures = _combosHelper.GetComboProcedures();
+            detailViewModel.Medicines = _combosHelper.GetComboMedicines();
             return View(detailViewModel);
         }
 
@@ -643,6 +650,8 @@ namespace PetCare.Api.Controllers
             Detail detail = await _context.Details
                 .Include(x => x.ClinicalHistory)
                 .Include(x => x.Procedure)
+                .Include(x => x.ClinicalHistory)
+                .Include(x => x.Medicine)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (detail == null)
             {
@@ -666,6 +675,7 @@ namespace PetCare.Api.Controllers
             }
 
             detailViewModel.Procedures = _combosHelper.GetComboProcedures();
+            detailViewModel.Medicines = _combosHelper.GetComboMedicines();
             return View(detailViewModel);
         }
 
@@ -687,6 +697,140 @@ namespace PetCare.Api.Controllers
             _context.Details.Remove(detail);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(DetailsClinicalHistory), new { id = detail.ClinicalHistory.Id });
+        }
+
+
+
+        //===================================================================
+
+        public async Task<IActionResult> FormulaClinicalHistory(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ClinicalHistory history = await _context.ClinicalHistories
+                .Include(x => x.MedicalFormulas)
+                .ThenInclude(x => x.Medicine)
+                .Include(x => x.Pet)
+                .ThenInclude(x => x.PetPhotos)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (history == null)
+            {
+                return NotFound();
+            }
+
+            return View(history);
+        }
+
+        public async Task<IActionResult> AddFormula(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ClinicalHistory history = await _context.ClinicalHistories.FindAsync(id);
+            if (history == null)
+            {
+                return NotFound();
+            }
+
+            MedicalFormulaViewModel model = new MedicalFormulaViewModel
+            {
+                ClinicalHistoryId = history.Id,
+                Medicines = _combosHelper.GetComboMedicines()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddFormula(MedicalFormulaViewModel formulaViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                ClinicalHistory history = await _context.ClinicalHistories
+                    .Include(x => x.MedicalFormulas)
+                    .FirstOrDefaultAsync(x => x.Id == formulaViewModel.ClinicalHistoryId);
+                if (history == null)
+                {
+                    return NotFound();
+                }
+
+                if (history.MedicalFormulas == null)
+                {
+                    history.MedicalFormulas = new List<MedicalFormula>();
+                }
+
+                MedicalFormula formula = await _converterHelper.ToFormulaAsync(formulaViewModel, true);
+                history.MedicalFormulas.Add(formula);
+                _context.ClinicalHistories.Update(history);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(FormulaClinicalHistory), new { id = formulaViewModel.ClinicalHistoryId });
+            }
+
+            formulaViewModel.Medicines = _combosHelper.GetComboMedicines();
+            return View(formulaViewModel);
+        }
+
+        public async Task<IActionResult> EditFormula(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            MedicalFormula formula = await _context.MedicalFormulas
+                .Include(x => x.ClinicalHistory)
+                .Include(x => x.Medicine)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (formula == null)
+            {
+                return NotFound();
+            }
+
+            MedicalFormulaViewModel model = _converterHelper.ToFormulaViewModel(formula);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditFormula(int id, MedicalFormulaViewModel formulaViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                MedicalFormula formula = await _converterHelper.ToFormulaAsync(formulaViewModel, false);
+                _context.MedicalFormulas.Update(formula);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(FormulaClinicalHistory), new { id = formulaViewModel.ClinicalHistoryId });
+            }
+
+            formulaViewModel.Medicines = _combosHelper.GetComboMedicines();
+            return View(formulaViewModel);
+        }
+
+        public async Task<IActionResult> DeleteFormula(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            MedicalFormula formula = await _context.MedicalFormulas
+                .Include(x => x.ClinicalHistory)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (formula == null)
+            {
+                return NotFound();
+            }
+
+            _context.MedicalFormulas.Remove(formula);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(FormulaClinicalHistory), new { id = formula.ClinicalHistory.Id });
         }
 
     }

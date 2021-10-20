@@ -22,6 +22,7 @@ namespace PetCare.Api.Data
             await _context.Database.EnsureCreatedAsync();
             await CheckPetTypesAsync();
             await CheckRacesAsync();
+            await CheckMedicinesAsync();
             await CheckDocumentTypesAsync();
             await CheckProceduresAsync();
             await CheckRolesAsycn();
@@ -110,12 +111,31 @@ namespace PetCare.Api.Data
             }
         }
 
+        private async Task CheckMedicinesAsync()
+        {
+            if (!_context.Medicines.Any())
+            {
+                _context.Medicines.Add(new Medicine { Price = 10000, Description = "Probioticos-Probiocat" });
+                _context.Medicines.Add(new Medicine { Price = 10000, Description = "Antiparasitarios Internos-Endogard" });
+                _context.Medicines.Add(new Medicine { Price = 10000, Description = "Probioticos-Probiodog" });
+                _context.Medicines.Add(new Medicine { Price = 10000, Description = "Dermantologico-Orenda" });
+                _context.Medicines.Add(new Medicine { Price = 10000, Description = "Dentyfarm" });
+                _context.Medicines.Add(new Medicine { Price = 10000, Description = "Otico-Gentax-Oftálmico" });
+                _context.Medicines.Add(new Medicine { Price = 10000, Description = "Canatox" });
+                _context.Medicines.Add(new Medicine { Price = 10000, Description = "Antiparasitarios Externos" });
+                _context.Medicines.Add(new Medicine { Price = 10000, Description = "Otico-Otofarm Basic" });
+                _context.Medicines.Add(new Medicine { Price = 10000, Description = "Nutraceutico F Hairball" });
+                await _context.SaveChangesAsync();
+            }
+        }
+
         private async Task CheckPetTypesAsync()
         {
             if (!_context.PetTypes.Any())
             {
                 _context.PetTypes.Add(new PetType { Description = "Perro" });
                 _context.PetTypes.Add(new PetType { Description = "Gato" });
+                _context.PetTypes.Add(new PetType { Description = "Erizo" });
                 await _context.SaveChangesAsync();
             }
         }

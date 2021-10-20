@@ -7,7 +7,6 @@ using PetCare.Common.Enums;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Azure;
 using PetCare.Api.Models.Request;
 using System;
 using PetCare.Api.Helpers;
